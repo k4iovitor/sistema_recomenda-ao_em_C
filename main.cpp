@@ -1,68 +1,47 @@
-#include <iostream>
-#include <vector>
-#include <map>
-#include <list>
-#include <string>
-#include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <string>
 
-// Inclusão dos outros arquivos
-#include "moduloListaCompras.cpp"
-#include "estruturas.h"
+#include "dadosCSV.h"
+#include "moduloListaCompras.h"
+#include "moduloSimilaridade.h"
+#include "moduloBusca.h"
 
-using namespace std;
+int main() {
+    Estruturas estrutura;
 
-int main(){
+    if (!carregarBaseDados("dados_venda_cluster_0.csv", estrutura)) {
+        return 1;
+    }
 
-    // Vetores dinâmicos que guardarão os códigos em texto sem duplicatas.
-    vector<string> vetorClientes;
-    vector<string> vetorProdutos;
+    printf("Arquivo carregado!\n");
 
-    // Estruturas de dicionário para ligar o texto do código a uma posição (índice) inteira.
-    map<string, int> mapaClientes;
-    map<string, int> mapaProdutos;
-
-    // Um vetor onde cada posição representa um cliente.
-    // Dentro de cada posição, há uma 'lista' de inteiros com os índices dos produtos que ele comprou.
-    vector<list <int>> listaCompras;
-
-    FILE *arquivo;
-    Dados dados; // Instância da struct que criamos em estruturas.h
-
-    // Abre o arquivo de dados em modo de leitura
-    // Certifique-se de que o caminho "../dados_venda_inicial/dados_venda_cluster_0.csv" esteja correto
-    arquivo = fopen("../dados_venda_inicial/dados_venda_cluster_0.csv", "r");
-
-    printf("Leitura dos dados do arquivo:\n");
-    printf("------------------------------------------------------\n");
-
-    // O arquivo tem uma primeira linha de cabeçalho
-    // Usamos o fgets apenas para "ler e jogar fora" essa primeira linha, para o fscanf não bugar.
-    char cabecalho[200];
-    fgets(cabecalho, sizeof(cabecalho), arquivo);
-
-    // Passo 1: Varre o arquivo para mapear todo mundo que existe
-    criaClienteProduto(arquivo, dados.data, dados.codCliente, dados.codProduto, dados.nomeProduto, vetorClientes, vetorProdutos, mapaClientes, mapaProdutos);
-
-    // Agora que sabemos exatamente quantos clientes únicos existem, redimensionamos
-    // o vetor de compras para ter exatamente esse tamanho.
-    listaCompras.resize(vetorClientes.size());
-
-    // Como já lemos o arquivo inteiro no passo 1, o ponteiro de leitura está lá no final.
-    // clearerr limpa possíveis erros de "fim de arquivo" (EOF).
-    clearerr(arquivo);
-    // rewind "rebobina" o arquivo, voltando o ponteiro de leitura para a primeira linha.
-    rewind(arquivo);
+    // ATIVIDADE 1
+    for (int i = 0; i < 3; i++) {
+        
+        char codigoInserido[10];
     
-    // Como voltamos pro começo, precisamos ignorar a linha de cabeçalho de novo.
-    fgets(cabecalho, sizeof(cabecalho), arquivo);
+        printf("\nDigite o codigo do cliente: \n");
+        scanf("%s", codigoInserido);
+        
+        exibirComprasDoCliente(estrutura, string(codigoInserido));
+    }
 
-    // Passo 2: Varre o arquivo novamente. Agora montando a matriz de quem comprou o quê.
-    preencheListaCompras(arquivo, dados.data, dados.codCliente, dados.codProduto, dados.nomeProduto, mapaClientes, mapaProdutos, listaCompras);
+    //ATIVIDADE 2
+    int tamanhoMatriz;
+    printf("\nInsira tamanho da Matriz de Similaridade ---\n");
+    scanf("%d", &tamanhoMatriz);
 
-    // Fechar o arquivo após terminar de usá-lo.
-    fclose(arquivo);
-    
+    vector<vector<double>> matrizSimilaridade = calcularMatrizSimilaridade(estrutura);
+
+    printf("\nMatriz de Similaridade de tamanho %d:\n", tamanhoMatriz);
+
+    for (int i = 0; i < tamanhoMatriz; i++) {
+        for (int j = 0; j < tamanhoMatriz; j++) {
+            printf("%.2f\t", matrizSimilaridade[i][j]); 
+        }
+        printf("\n");
+    }
+
     return 0;
+
 }
