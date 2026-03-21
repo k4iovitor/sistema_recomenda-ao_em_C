@@ -5,11 +5,12 @@
 #include "moduloListaCompras.h"
 #include "moduloSimilaridade.h"
 #include "moduloBusca.h"
+#include "moduloRecomendacao.h"
 
 int main() {
     Estruturas estrutura;
 
-    if (!carregarBaseDados("dados_venda_cluster_0.csv", estrutura)) {
+    if (!carregarBaseDados("dados_venda_inicial/dados_venda_cluster_0.csv", estrutura)) {
         return 1;
     }
 
@@ -40,6 +41,23 @@ int main() {
             printf("%.2f\t", matrizSimilaridade[i][j]); 
         }
         printf("\n");
+    }
+
+    // ATIVIDADE 3
+
+    // Quantidade de recomendações
+    int k;
+    printf("\nQuantos produtos deseja recomendar? ");
+    scanf("%d", &k);
+
+    // Solicitar para 3 clientes
+    for (int i = 0; i < 3; i++) {
+        char codigoInserido[50];
+        
+        printf("\n[%d/3] Digite o codigo original do cliente para recomendacao: ", i + 1);
+        scanf("%s", codigoInserido);
+
+        recomendarAoCliente(estrutura, string(codigoInserido), k, matrizSimilaridade);
     }
 
     return 0;
