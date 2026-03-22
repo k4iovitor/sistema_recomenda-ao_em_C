@@ -1,5 +1,4 @@
-#include "moduloListaCompras.h"
-#include "dadosCSV.h"
+#include "sistema_recomendacao.h"
 
 // Retorna 'true' se deu certo e 'false' se houver erro na leitura
 bool carregarBaseDados(const char* caminhoArquivo, Estruturas& estrutura) {
