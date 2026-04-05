@@ -17,7 +17,7 @@ bool carregarBaseDados(const char* caminhoArquivo, Estruturas& estrutura) {
     while (fscanf(arquivo, "%[^,],%[^,],%[^,],%[^\n]\n",
         dados.data, dados.codigoCliente, dados.codigoProduto, dados.nomeProduto) == 4) {
         
-        //transforma a string estilo C (char[]) em uma std::string do C++, exigida pelo map.
+        //transforma a char[] de C em uma string do C++, exigida pelo map
         string sCodCli(dados.codigoCliente);
         
         /*Procura se o código do cliente já existe no mapa, até o final do mapa

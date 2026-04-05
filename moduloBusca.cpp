@@ -1,17 +1,17 @@
 #include "sistema_recomendacao.h"
-#include <stdio.h>
 
-void exibirComprasDoCliente(const Estruturas& estrutura, const string& codigoBusca) {
+vector<string> obterComprasDoCliente(const Estruturas& estrutura, const string& codigoBusca) {
+    vector<string> compras;
+
+    auto it = estrutura.mapaClientes.find(codigoBusca);
     
-    int idxCliente = estrutura.mapaClientes.find(codigoBusca) -> second; 
-    
-    if (estrutura.listaCompras[idxCliente].empty()) {
-        printf("- Nenhum produto registado.\n");
-    } else {
-        printf("O cliente comprou:\n");
+    if (it != estrutura.mapaClientes.end()) {
+        int idxCliente = it->second;
         for (int idxProduto : estrutura.listaCompras[idxCliente]) {
-            printf("  - %s\n", estrutura.vetorProdutos[idxProduto].c_str());
+            compras.push_back(estrutura.vetorProdutos[idxProduto]);
         }
     }
+
+    return compras;
 
 }

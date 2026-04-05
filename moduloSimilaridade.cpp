@@ -5,8 +5,6 @@ vector<vector<double>> calcularMatrizSimilaridade(const Estruturas& estrutura, b
     int n = estrutura.vetorClientes.size();
     int m = estrutura.vetorProdutos.size();
 
-    clock_t inicio = clock();
-
     // 1. Matriz de Compras A (n clientes x m produtos)
     vector<vector<int>> A(n, vector<int>(m, 0));
     for (int i = 0; i < n; i++) {
@@ -19,7 +17,7 @@ vector<vector<double>> calcularMatrizSimilaridade(const Estruturas& estrutura, b
     vector<vector<int>> I(n, vector<int>(n, 0));
 
     if (!otimizado) {
-        // --- Algoritmo Padrão (A x At) ---
+        //Padrão (A x At) 
         vector<vector<int>> At(m, vector<int>(n, 0));
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -35,7 +33,7 @@ vector<vector<double>> calcularMatrizSimilaridade(const Estruturas& estrutura, b
             }
         }
     } else {
-        // --- Algoritmo Otimizado (Explorando Simetria) ---
+        //Otimizado (Simetria)
         for (int i = 0; i < n; i++) {
             for (int j = i; j < n; j++) {
                 int soma = 0;
@@ -57,10 +55,6 @@ vector<vector<double>> calcularMatrizSimilaridade(const Estruturas& estrutura, b
             }
         }
     }
-
-    clock_t fim = clock();
-    double tempo_segundos = (double)(fim - inicio) / CLOCKS_PER_SEC;
-    printf("-> Tempo de execucao: %.4f segundos.\n\n", tempo_segundos);
 
     return Similaridade;
 }
